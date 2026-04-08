@@ -1,0 +1,119 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Step 2: Load dataset
+df = pd.read_csv("mouse_viral_study.csv")
+
+# Step 3: Explore data
+print(df.head())
+print(df.info())
+print(df['Virus Present'].value_counts())
+
+# Step 4: Visualization
+sns.scatterplot(x='Med_1_mL', y='Med_2_mL',
+                hue='Virus Present', data=df)
+plt.show()
+
+# Step 5: Define features & target
+X = df[['Med_1_mL', 'Med_2_mL']]
+y = df['Virus Present']
+
+# Step 6: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 7: Train SVM model
+model = SVC(kernel='linear')   # you can also try 'rbf'
+model.fit(X_train, y_train)
+
+# Step 8: Predictions
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+# Step 9: Accuracy
+print("Training Accuracy:", accuracy_score(y_train, y_pred_train))
+print("Testing Accuracy:", accuracy_score(y_test, y_pred_test))
+
+# Step 10: Evaluation
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_test))
+print("Classification Report:\n", classification_report(y_test, y_pred_test))
+
+
+1. What is SVM?
+
+Answer:
+SVM is a supervised machine learning algorithm used for classification and regression that finds the optimal hyperplane to separate data.
+
+🔹 2. What is a hyperplane?
+
+Answer:
+A decision boundary that separates classes.
+
+🔹 3. What are support vectors?
+
+Answer:
+Points closest to the hyperplane.
+
+🔹 4. What is margin?
+
+Answer:
+Distance between hyperplane and nearest points.
+
+🔹 5. What is kernel trick?
+
+Answer:
+Transforms data into higher dimension for separation.
+
+🔹 6. Types of kernels?
+
+Answer:
+
+Linear
+Polynomial
+RBF
+🔹 7. Why SVM is powerful?
+
+Answer:
+
+Works well in high dimensions
+Effective for small datasets
+🔹 8. Disadvantages?
+
+Answer:
+
+Slow for large data
+Hard to choose kernel
+🔹 9. Difference: SVM vs Logistic Regression?
+SVM	Logistic Regression
+Margin-based	Probability-based
+Works in high dimension	Simpler model
+🔹 10. When to use SVM?
+
+Answer:
+
+Small dataset
+High dimensional data
+🌍 REAL-LIFE APPLICATIONS
+🧬 Medical Diagnosis
+Virus detection (your example)
+📧 Spam Detection
+Email classification
+🧠 Image Recognition
+Face detection
+🧾 Text Classification
+Sentiment analysis
+🧠 BEST VIVA LINE
+
+👉 Say this:
+
+"SVM is a supervised learning algorithm that finds the optimal hyperplane separating different classes by maximizing the margin between them."
+
+⭐ DONE: ALL PRACTICALS COMPLETE
