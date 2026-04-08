@@ -1,0 +1,145 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import ConfusionMatrixDisplay
+
+# Step 2: Load dataset
+df = pd.read_csv("gene_expression.csv")
+
+# Step 3: Explore data
+print(df.head())
+print(df.shape)
+print(df.info())
+
+# Step 4: Visualization
+sns.scatterplot(data=df, x='Gene One', y='Gene Two')
+plt.show()
+
+sns.scatterplot(data=df, x='Gene One', y='Gene Two', hue='Cancer Present')
+plt.show()
+
+# Step 5: Define variables
+X = df.drop('Cancer Present', axis=1)
+y = df['Cancer Present']
+
+# Step 6: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Step 7: Feature scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Step 8: Train KNN model
+knn_model = KNeighborsClassifier(n_neighbors=5)
+knn_model.fit(X_train, y_train)
+
+# Step 9: Prediction
+y_pred = knn_model.predict(X_test)
+
+# Step 10: Evaluation
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Classification Report:\n", classification_report(y_test, y_pred))
+
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
+plt.show()
+
+# Step 11: Finding best K value
+error_rate = []
+
+for k in range(1, 30):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+    pred_k = knn.predict(X_test)
+    error = 1 - accuracy_score(y_test, pred_k)
+    error_rate.append(error)
+
+# Step 12: Plot error vs K
+plt.figure(figsize=(10,6))
+plt.plot(range(1,30), error_rate, marker='o')
+plt.xlabel("K Value")
+plt.ylabel("Error Rate")
+plt.title("Error Rate vs K Value")
+plt.show()
+
+1. What is KNN?
+
+Answer:
+KNN is a supervised learning algorithm that classifies data based on nearest neighbors.
+
+🔹 2. Is KNN parametric or non-parametric?
+
+Answer:
+Non-parametric (does not assume any formula)
+
+🔹 3. What is K?
+
+Answer:
+Number of nearest neighbors used for prediction
+
+🔹 4. What happens if K is small?
+
+Answer:
+
+Sensitive to noise
+Overfitting
+🔹 5. What happens if K is large?
+
+Answer:
+
+Smooth decision boundary
+Underfitting
+🔹 6. Why scaling is important?
+
+Answer:
+
+Distance-based algorithm
+Features must be on same scale
+🔹 7. What distance is used?
+
+Answer:
+
+Euclidean distance
+🔹 8. What is lazy learning?
+
+Answer:
+
+KNN does not learn model
+Stores data and predicts later
+🔹 9. What is time complexity?
+
+Answer:
+High (because it checks all points)
+
+🔹 10. Advantages of KNN?
+
+Answer:
+
+Simple
+No training time
+🔹 11. Disadvantages?
+
+Answer:
+
+Slow for large data
+Sensitive to scaling
+🌍 REAL-LIFE APPLICATIONS
+🏥 Healthcare
+Disease classification
+📷 Image Recognition
+Face detection
+📧 Spam Detection
+Email classification
+🧬 Bioinformatics
+Gene classification (your example)
