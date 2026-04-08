@@ -1,0 +1,122 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# Step 2: Load dataset
+df = pd.read_csv("ice_cream_selling_data.csv")
+
+# Step 3: View data
+print(df.head())
+print(df.shape)
+
+# Step 4: Define variables
+X = df.iloc[:, 0:1]   # Temperature
+y = df.iloc[:, -1]    # Ice cream sales
+
+# Step 5: Plot original data
+plt.scatter(X, y, color='blue')
+plt.xlabel("Temperature")
+plt.ylabel("Ice Cream Sales")
+plt.title("Original Data")
+plt.show()
+
+# Step 6: Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=2
+)
+
+# Step 7: Polynomial transformation
+poly = PolynomialFeatures(degree=2)
+X_train_poly = poly.fit_transform(X_train)
+X_test_poly = poly.transform(X_test)
+
+# Step 8: Train model
+model = LinearRegression()
+model.fit(X_train_poly, y_train)
+
+# Step 9: Predict
+y_pred = model.predict(X_test_poly)
+
+# Step 10: Evaluate model
+print("R2 Score:", r2_score(y_test, y_pred))
+
+# Step 11: Print coefficients
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+
+# Step 12: Plot regression curve
+X_new = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
+X_new_poly = poly.transform(X_new)
+y_new = model.predict(X_new_poly)
+
+plt.scatter(X, y, color='blue', label="Data")
+plt.plot(X_new, y_new, color='red', linewidth=2, label="Polynomial Curve")
+plt.xlabel("Temperature")
+plt.ylabel("Ice Cream Sales")
+plt.legend()
+plt.show()
+
+
+
+1. What is Polynomial Regression?
+
+Answer:
+It is a regression technique used when the relationship between variables is non-linear.
+
+🔹 2. Difference: Linear vs Polynomial
+Linear	Polynomial
+Straight line	Curved line
+y = mx + b	y = b + b1x + b2x²
+🔹 3. Why use Polynomial Regression?
+
+Answer:
+
+When data follows a curve
+Linear regression cannot fit properly
+🔹 4. What is degree?
+
+Answer:
+
+Power of x
+👉 Example:
+degree 2 → x²
+degree 3 → x³
+🔹 5. What happens if degree is too high?
+
+Answer:
+
+Overfitting
+Model memorizes data
+🔹 6. What is overfitting?
+
+Answer:
+Model fits training data too closely but fails on new data
+
+🔹 7. What is R² score?
+
+Answer:
+
+Measures accuracy
+Range: 0 to 1
+Closer to 1 → better
+🔹 8. Why use PolynomialFeatures?
+
+Answer:
+
+Converts input into higher powers
+Helps model learn curves
+🌍 REAL-LIFE APPLICATIONS
+🍦 Ice Cream Sales
+Temperature ↑ → Sales ↑ (curved relation)
+📈 Economics
+Demand vs price
+🚗 Automobile
+Speed vs fuel consumption
+🏥 Healthcare
+Dose vs effect
