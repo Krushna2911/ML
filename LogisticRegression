@@ -1,0 +1,205 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import ConfusionMatrixDisplay, RocCurveDisplay
+from sklearn.model_selection import cross_val_score
+
+# Step 2: Load dataset
+df = pd.read_csv("hearing_test.csv")
+
+# Step 3: Explore data
+print(df.head())
+print(df.shape)
+print(df.columns)
+print(df.dtypes)
+print(df.info())
+print(df.describe())
+
+# Step 4: Visualization
+sns.scatterplot(x='age', y='physical_score', hue='test_result', data=df)
+plt.show()
+
+sns.scatterplot(x='physical_score', y='test_result', data=df)
+plt.show()
+
+sns.scatterplot(x='age', y='test_result', data=df)
+plt.show()
+
+# Step 5: Check missing values
+print(df.isnull().sum())
+
+# Step 6: Define variables
+X = df.drop("test_result", axis=1)
+y = df["test_result"]
+
+# Step 7: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=1
+)
+
+# Step 8: Feature scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Step 9: Create model
+log_model = LogisticRegression()
+
+# Step 10: Train model
+log_model.fit(X_train, y_train)
+
+# Step 11: Predictions
+y_pred_train = log_model.predict(X_train)
+y_pred_test = log_model.predict(X_test)
+
+# Step 12: Accuracy
+print("Training Accuracy:", accuracy_score(y_train, y_pred_train))
+print("Testing Accuracy:", accuracy_score(y_test, y_pred_test))
+
+# Step 13: Confusion Matrix
+cm = confusion_matrix(y_test, y_pred_test)
+print("Confusion Matrix:\n", cm)
+
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test)
+plt.show()
+
+# Step 14: Classification Report
+print("Classification Report:\n", classification_report(y_test, y_pred_test))
+
+# Step 15: ROC Curve
+RocCurveDisplay.from_estimator(log_model, X_test, y_test)
+plt.show()
+
+# Step 16: Cross-validation
+scores = cross_val_score(log_model, X, y, cv=5)
+print("Cross-validation scores:", scores)
+print("Mean score:", scores.mean())
+
+# Step 17: New prediction
+new_data = [[54, 48]]  # age, physical_score
+
+1. What is Logistic Regression?
+
+Answer:
+It is a classification algorithm used to predict categorical outcomes like Yes/No or 0/1.
+
+🔹 2. Difference between Linear & Logistic Regression?
+Linear	Logistic
+Predicts values	Predicts classes
+Output = number	Output = probability
+🔹 3. Why sigmoid function?
+
+Answer:
+
+Converts output into probability between 0 and 1
+🔹 4. What is threshold?
+
+Answer:
+
+Usually 0.5
+Above → class 1
+Below → class 0
+🔹 5. What is confusion matrix?
+
+Answer:
+Table showing:
+
+True Positive
+True Negative
+False Positive
+False Negative
+🔹 6. What is accuracy?
+
+Answer:
+
+𝐴
+𝑐
+𝑐
+𝑢
+𝑟
+𝑎
+𝑐
+𝑦
+=
+𝐶
+𝑜
+𝑟
+𝑟
+𝑒
+𝑐
+𝑡
+ 
+𝑃
+𝑟
+𝑒
+𝑑
+𝑖
+𝑐
+𝑡
+𝑖
+𝑜
+𝑛
+𝑠
+𝑇
+𝑜
+𝑡
+𝑎
+𝑙
+ 
+𝑃
+𝑟
+𝑒
+𝑑
+𝑖
+𝑐
+𝑡
+𝑖
+𝑜
+𝑛
+𝑠
+Accuracy=
+Total Predictions
+Correct Predictions
+	​
+
+🔹 7. What is precision?
+
+Answer:
+
+Correct positive predictions / total predicted positive
+🔹 8. What is recall?
+
+Answer:
+
+Correct positives / actual positives
+🔹 9. What is ROC curve?
+
+Answer:
+
+Graph showing performance of classification model
+🔹 10. Why scaling is important?
+
+Answer:
+
+Improves model performance
+Helps faster convergence
+🌍 REAL-LIFE APPLICATIONS
+🏥 Healthcare
+Disease prediction (Yes/No)
+📧 Spam Detection
+Spam or Not Spam
+💳 Fraud Detection
+Fraud or Legit
+🎓 Education
+Pass or Fail prediction
+
+new_data = scaler.transform(new_data)
+print("Prediction:", log_model.predict(new_data))
