@@ -1,0 +1,159 @@
+# Step 1: Import required libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Step 2: Create dataset
+cgpa = np.array([6.0, 6.5, 7.0, 7.2, 7.5, 8.0, 8.2, 9.0, 9.1]).reshape(-1, 1)
+package = np.array([3.0, 3.5, 4.0, 4.3, 4.8, 5.2, 6.0, 6.8, 7.5])
+
+# Step 3: Plot the dataset
+plt.scatter(cgpa, package)
+plt.xlabel("CGPA")
+plt.ylabel("Package (LPA)")
+plt.title("CGPA vs Package Dataset")
+plt.show()
+
+# Step 4: Create and train the model
+model = LinearRegression()
+model.fit(cgpa, package)
+
+# Step 5: Take user input
+new_cgpa = float(input("Enter CGPA to predict package: "))
+
+# Step 6: Predict package
+predicted_package = model.predict([[new_cgpa]])
+
+# Step 7: Display result
+print(f"Predicted package for CGPA {new_cgpa} is {predicted_package[0]:.2f} LPA")
+
+# Step 8: Display coefficient and intercept
+print("Coefficient (Slope):", model.coef_[0])
+print("Intercept:", model.intercept_)
+
+# Step 9: Plot regression line
+predicted_line = model.predict(cgpa)
+
+plt.scatter(cgpa, package, label="Actual Data")
+plt.plot(cgpa, predicted_line, color='red', label="Regression Line")
+plt.xlabel("CGPA")
+plt.ylabel("Package (LPA)")
+plt.title("Linear Regression Model: CGPA vs Package")
+plt.legend()
+plt.show()
+
+
+
+
+
+
+1. What is Simple Linear Regression?
+
+Answer:
+Simple Linear Regression is a statistical method used to model the relationship between:
+
+One independent variable (X) → e.g., CGPA
+One dependent variable (Y) → e.g., Package
+
+It predicts Y using a straight-line equation.
+
+🔹 2. What is the equation of Linear Regression?
+
+y=mx+b
+Answer:
+
+y → predicted output (package)
+x → input (CGPA)
+m → slope (rate of change)
+b → intercept (starting value)
+🔹 3. What is the dependent and independent variable in your program?
+
+Answer:
+
+Independent variable (X): CGPA
+Dependent variable (Y): Placement Package
+🔹 4. What is the role of the slope (coefficient)?
+
+Answer:
+
+It shows how much the output changes when input increases by 1
+👉 Example:
+If slope = 0.8 → package increases by 0.8 LPA for every 1 CGPA increase
+🔹 5. What is intercept?
+
+Answer:
+
+It is the value of Y when X = 0
+It represents the base value of prediction
+🔹 6. Why do we use .reshape(-1,1)?
+
+Answer:
+
+Scikit-learn expects input in 2D format (rows × columns)
+.reshape(-1,1) converts 1D array into column format
+🔹 7. What does model.fit() do?
+
+Answer:
+
+It trains the model
+Finds the best-fit line by calculating slope and intercept
+🔹 8. What does model.predict() do?
+
+Answer:
+
+Uses learned equation to predict output for new input values
+🔹 9. What is a regression line?
+
+Answer:
+
+A straight line that best fits the data points
+Shows the relationship between X and Y
+🔹 10. What is overfitting?
+
+Answer:
+
+When model memorizes data instead of learning pattern
+Performs well on training data but poorly on new data
+🔹 11. What is underfitting?
+
+Answer:
+
+Model is too simple
+Cannot capture the relationship properly
+🔹 12. Why is visualization important?
+
+Answer:
+
+Helps understand data pattern
+Shows whether relationship is linear or not
+🔹 13. What type of relationship does linear regression assume?
+
+Answer:
+
+Linear relationship between variables
+🔹 14. What are the assumptions of Linear Regression?
+
+Answer:
+
+Linear relationship
+No noise (minimal error)
+Independent observations
+Constant variance
+🔹 15. What is error in regression?
+
+Answer:
+
+Difference between actual value and predicted value
+🌍 APPLICATIONS OF SIMPLE LINEAR REGRESSION
+📊 1. Education (Your Example)
+Predict placement package from CGPA
+Analyze student performance
+💰 2. Business & Sales
+Predict sales based on advertising budget
+Forecast revenue
+🏠 3. Real Estate
+Predict house price based on area
+Example:
+Area ↑ → Price ↑
+🚗 4. Automobile
+Predict fuel effici
