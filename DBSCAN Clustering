@@ -1,0 +1,106 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+# Step 2: Load dataset
+dataset = pd.read_csv("Mall_Customers.csv")
+
+# Step 3: Explore data
+print(dataset.head())
+print(dataset.shape)
+print(dataset.info())
+
+# Step 4: Select features
+X = dataset.iloc[:, [3, 4]].values
+
+# Step 5: Feature scaling (IMPORTANT for DBSCAN)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Step 6: Apply DBSCAN
+dbs = DBSCAN(eps=0.5, min_samples=5)
+y_dbs = dbs.fit_predict(X_scaled)
+
+print("Cluster labels:", np.unique(y_dbs))
+
+# Step 7: Visualize clusters
+plt.scatter(X[y_dbs == -1, 0], X[y_dbs == -1, 1],
+            s=100, c='black', label='Noise')
+
+plt.scatter(X[y_dbs == 0, 0], X[y_dbs == 0, 1],
+            s=100, c='red', label='Cluster 1')
+
+plt.scatter(X[y_dbs == 1, 0], X[y_dbs == 1, 1],
+            s=100, c='blue', label='Cluster 2')
+
+plt.scatter(X[y_dbs == 2, 0], X[y_dbs == 2, 1],
+            s=100, c='green', label='Cluster 3')
+
+plt.title('DBSCAN Clusters')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.legend()
+plt.show()
+
+
+
+What is DBSCAN?
+
+Answer:
+A density-based clustering algorithm that groups points based on density and identifies noise.
+
+🔹 2. What is eps?
+
+Answer:
+Maximum distance between two points.
+
+🔹 3. What is min_samples?
+
+Answer:
+Minimum points required to form a dense region.
+
+🔹 4. What is noise?
+
+Answer:
+Points that do not belong to any cluster.
+
+🔹 5. Why DBSCAN is better than K-Means?
+
+Answer:
+
+Detects outliers
+Works for irregular shapes
+🔹 6. What is core point?
+
+Answer:
+Point with enough neighbors within eps.
+
+🔹 7. What is border point?
+
+Answer:
+Point near a cluster but not dense.
+
+🔹 8. Output labels?
+
+Answer:
+Cluster numbers + -1 for noise.
+
+🔹 9. Does DBSCAN need scaling?
+
+Answer:
+Yes, very important.
+
+🔹 10. Limitation?
+
+Answer:
+Hard to choose eps.
+
+🧠 BEST VIVA LINE
+
+👉 Say this:
+
+"DBSCAN is a density-based clustering algorithm that groups closely packed points and marks low-density points as noise."
