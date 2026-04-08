@@ -1,0 +1,136 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+
+# Step 2: Load dataset
+df = pd.read_csv("penguins_size.csv")
+
+# Step 3: Explore data
+print(df.head())
+print(df.info())
+print(df['species'].value_counts())
+
+# Step 4: Data cleaning
+df = df.dropna()
+
+# Step 5: Visualization
+sns.scatterplot(x='culmen_length_mm', y='culmen_depth_mm',
+                hue='species', data=df)
+plt.show()
+
+# Step 6: Convert categorical to numeric
+X = pd.get_dummies(df.drop('species', axis=1), drop_first=True)
+y = df['species']
+
+# Step 7: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=101
+)
+
+# Step 8: Train Random Forest model
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+# Step 9: Predictions
+y_pred_test = model.predict(X_test)
+y_pred_train = model.predict(X_train)
+
+# Step 10: Accuracy
+print("Training Accuracy:", accuracy_score(y_train, y_pred_train))
+print("Testing Accuracy:", accuracy_score(y_test, y_pred_test))
+
+# Step 11: Confusion Matrix
+cm = confusion_matrix(y_test, y_pred_test)
+print("Confusion Matrix:\n", cm)
+
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test)
+plt.show()
+
+# Step 12: Classification Report
+print("Classification Report:\n", classification_report(y_test, y_pred_test))
+
+# Step 13: Feature Importance
+feature_imp = pd.DataFrame({
+    "Feature": X.columns,
+    "Importance": model.feature_importances_
+})
+print(feature_imp.sort_values(by="Importance", ascending=False))
+
+
+1. What is Random Forest?
+
+Answer:
+Random Forest is an ensemble learning method that combines multiple decision trees to improve accuracy.
+
+🔹 2. Why called “Random”?
+
+Answer:
+
+Random data samples
+Random feature selection
+🔹 3. What is ensemble learning?
+
+Answer:
+Combining multiple models to improve performance
+
+🔹 4. Difference: Decision Tree vs Random Forest?
+Decision Tree	Random Forest
+Single tree	Multiple trees
+Overfitting	Reduced overfitting
+Less accurate	More accurate
+🔹 5. What is bagging?
+
+Answer:
+
+Bootstrap sampling
+Random subsets of data used
+🔹 6. What is feature importance?
+
+Answer:
+Shows which feature contributes most
+
+🔹 7. Advantages?
+
+Answer:
+
+High accuracy
+Handles overfitting
+Works well with large data
+🔹 8. Disadvantages?
+
+Answer:
+
+Slower
+Less interpretable
+🔹 9. What is n_estimators?
+
+Answer:
+Number of trees in forest
+
+🔹 10. Why better than decision tree?
+
+Answer:
+
+Reduces variance
+More stable
+🌍 REAL-LIFE APPLICATIONS
+💳 Banking
+Fraud detection
+🏥 Healthcare
+Disease prediction
+📈 Business
+Customer behavior
+🌱 Biology
+Species classification (your example)
+🧠 BEST VIVA LINE
+
+👉 Say this:
+
+"Random Forest is an ensemble learning algorithm that builds multiple decision trees using random subsets of data and features, and combines their predictions using majority voting to improve accuracy and reduce overfitting."
