@@ -1,0 +1,137 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+
+# Step 2: Load dataset
+df = pd.read_csv("penguins_size.csv")
+
+# Step 3: Explore data
+print(df.head())
+print(df.info())
+print(df['species'].value_counts())
+
+# Step 4: Remove missing values
+df = df.dropna()
+
+# Step 5: Visualization
+sns.scatterplot(x='culmen_length_mm', y='culmen_depth_mm',
+                hue='species', data=df)
+plt.show()
+
+# Step 6: Define variables
+# Convert categorical to numeric
+X = pd.get_dummies(df.drop('species', axis=1), drop_first=True)
+y = df['species']
+
+# Step 7: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=101
+)
+
+# Step 8: Train Decision Tree model
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+
+# Step 9: Predictions
+y_pred_test = model.predict(X_test)
+y_pred_train = model.predict(X_train)
+
+# Step 10: Accuracy
+print("Training Accuracy:", accuracy_score(y_train, y_pred_train))
+print("Testing Accuracy:", accuracy_score(y_test, y_pred_test))
+
+# Step 11: Confusion Matrix
+cm = confusion_matrix(y_test, y_pred_test)
+print("Confusion Matrix:\n", cm)
+
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred_test)
+plt.show()
+
+# Step 12: Classification Report
+print("Classification Report:\n", classification_report(y_test, y_pred_test))
+
+# Step 13: Feature Importance
+feature_imp = pd.DataFrame({
+    "Feature": X.columns,
+    "Importance": model.feature_importances_
+})
+print(feature_imp)
+
+# Step 14: Plot Decision Tree
+plt.figure(figsize=(12,8))
+plot_tree(model, filled=True, feature_names=X.columns)
+plt.show()
+
+
+
+What is Decision Tree?
+
+Answer:
+A supervised learning algorithm that uses tree-like structure for classification or regression.
+
+🔹 2. What are nodes?
+
+Answer:
+
+Root node → starting point
+Internal node → decision
+Leaf node → result
+🔹 3. What is Gini Index?
+
+Answer:
+
+Measures impurity of data
+Lower value → better split
+🔹 4. What is entropy?
+
+Answer:
+
+Measures randomness in data
+🔹 5. Difference: Gini vs Entropy?
+Gini	Entropy
+Faster	More accurate
+Less complex	More complex
+🔹 6. What is overfitting?
+
+Answer:
+Tree becomes too complex and memorizes data
+
+🔹 7. How to prevent overfitting?
+
+Answer:
+
+Limit depth
+Pruning
+🔹 8. Advantages?
+
+Answer:
+
+Easy to understand
+No scaling required
+🔹 9. Disadvantages?
+
+Answer:
+
+Overfitting
+Sensitive to data
+🔹 10. What is feature importance?
+
+Answer:
+Shows how much each feature contributes to prediction
+
+🌍 REAL-LIFE APPLICATIONS
+🏥 Healthcare
+Disease diagnosis
+💳 Banking
+Loan approval
+🛒 E-commerce
+Customer segmentation
+🌱 Biology
+Species classification (your example)
