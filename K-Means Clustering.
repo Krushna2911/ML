@@ -1,0 +1,117 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.cluster import KMeans
+
+# Step 2: Load dataset
+dataset = pd.read_csv("Mall_Customers.csv")
+
+# Step 3: Explore data
+print(dataset.head())
+print(dataset.shape)
+print(dataset.info())
+print(dataset.isnull().sum())
+
+# Step 4: Select features (Income & Spending Score)
+X = dataset.iloc[:, [3, 4]].values
+
+# Step 5: Elbow Method to find optimal clusters
+wcss = []
+
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, init='k-means++', random_state=42)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+
+# Plot Elbow Graph
+plt.plot(range(1, 11), wcss)
+plt.title('Elbow Method')
+plt.xlabel('Number of Clusters')
+plt.ylabel('WCSS')
+plt.show()
+
+# Step 6: Train model with optimal clusters (example k=5)
+kmeans = KMeans(n_clusters=5, init='k-means++', random_state=42)
+y_kmeans = kmeans.fit_predict(X)
+
+# Step 7: Visualize clusters
+plt.scatter(X[y_kmeans == 0, 0], X[y_kmeans == 0, 1], s=100, c='red', label='Cluster 1')
+plt.scatter(X[y_kmeans == 1, 0], X[y_kmeans == 1, 1], s=100, c='blue', label='Cluster 2')
+plt.scatter(X[y_kmeans == 2, 0], X[y_kmeans == 2, 1], s=100, c='green', label='Cluster 3')
+plt.scatter(X[y_kmeans == 3, 0], X[y_kmeans == 3, 1], s=100, c='cyan', label='Cluster 4')
+plt.scatter(X[y_kmeans == 4, 0], X[y_kmeans == 4, 1], s=100, c='magenta', label='Cluster 5')
+
+# Plot centroids
+plt.scatter(kmeans.cluster_centers_[:, 0],
+            kmeans.cluster_centers_[:, 1],
+            s=300, c='yellow', label='Centroids')
+plt.title('Clusters of Customers')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+
+
+
+What is K-Means?
+
+Answer:
+K-Means is an unsupervised algorithm that groups data into K clusters based on similarity.
+
+🔹 2. What is K?
+
+Answer:
+Number of clusters.
+
+🔹 3. What is centroid?
+
+Answer:
+Center of a cluster.
+
+🔹 4. What is WCSS?
+
+Answer:
+Sum of squared distances of points from centroid.
+
+🔹 5. What is Elbow Method?
+
+Answer:
+A method to find optimal K using WCSS graph.
+
+🔹 6. Is K-Means supervised?
+
+Answer:
+No, it is unsupervised.
+
+🔹 7. Limitations?
+
+Answer:
+
+Need to choose K manually
+Sensitive to outliers
+🔹 8. Why ‘k-means++’?
+
+Answer:
+Better initialization of centroids.
+
+🔹 9. Difference: KNN vs K-Means?
+KNN	K-Means
+Supervised	Unsupervised
+Uses labels	No labels
+Classification	Clustering
+🔹 10. Output of K-Means?
+
+Answer:
+Cluster labels + centroids.
+
+🧠 BEST VIVA LINE
+
+👉 Say this:
+
+"K-Means is an unsupervised algorithm that partitions data into K clusters by minimizing the distance between data points and their respective centroids."
+
+
+
+
+plt.legend()
+plt.show()
