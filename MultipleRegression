@@ -1,0 +1,161 @@
+# Step 1: Import libraries
+import pandas as pd
+import numpy as np
+import plotly.express as px
+
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Step 2: Load dataset
+df = pd.read_csv("Advertising.csv")
+
+# Step 3: Display basic info
+print(df.head())
+print(df.shape)
+print(df.info())
+
+# Step 4: Define variables
+# Independent variables (TV, Radio, Newspaper)
+X = df[['TV', 'Radio', 'Newspaper']]
+
+# Dependent variable (Sales)
+y = df['Sales']
+
+# Step 5: Visualization (3D scatter)
+fig = px.scatter_3d(df, x='TV', y='Radio', z='Sales',
+                    title="Sales vs TV & Radio Advertising")
+fig.show()
+
+# Step 6: Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 7: Create and train model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Step 8: Display coefficients & intercept
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+
+# Step 9: Predict values
+y_pred = model.predict(X_test)
+
+# Step 10: Evaluate model
+print("Mean Absolute Error:", mean_absolute_error(y_test, y_pred))
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("R2 Score:", r2_score(y_test, y_pred))
+
+# Step 11: Predict new data
+new_data = [[230, 37, 69]]  # TV, Radio, Newspaper
+prediction = model.predict(new_data)
+print("Predicted Sales:", prediction[0])
+
+
+1. What is Multiple Linear Regression?
+
+Answer:
+It is a technique used to predict output using more than one input variable.
+
+🔹 2. Difference between Simple & Multiple Regression?
+Simple	Multiple
+One input	Multiple inputs
+Example: CGPA → Package	TV, Radio → Sales
+🔹 3. What is the equation?
+
+Already shown above:
+
+𝑦
+=
+𝑏
++
+𝑚
+1
+𝑥
+1
++
+𝑚
+2
+𝑥
+2
++
+𝑚
+3
+𝑥
+3
+y=b+m
+1
+	​
+
+x
+1
+	​
+
++m
+2
+	​
+
+x
+2
+	​
+
++m
+3
+	​
+
+x
+3
+	​
+
+🔹 4. What are coefficients?
+
+Answer:
+
+They show impact of each feature
+👉 Example:
+TV coefficient = how much sales increase per TV ad
+🔹 5. Why train-test split?
+
+Answer:
+
+To check model performance on unseen data
+🔹 6. What is R² score?
+
+Answer:
+
+Measures how well model fits data
+Range: 0 to 1
+Closer to 1 = better model
+🔹 7. What is MAE?
+
+Answer:
+
+Average absolute error between predicted & actual values
+🔹 8. What is MSE?
+
+Answer:
+
+Penalizes large errors more (squared error)
+🔹 9. What are independent variables in your experiment?
+
+Answer:
+
+TV, Radio, Newspaper
+🔹 10. What is dependent variable?
+
+Answer:
+
+Sales
+🌍 REAL-LIFE APPLICATIONS
+📢 Marketing
+Predict sales from advertising budget
+🏠 Real Estate
+Price prediction using:
+area, location, rooms
+🚗 Automobile
+Predict car price using:
+mileage, engine, age
+🏥 Healthcare
+Predict disease risk using multiple factors
